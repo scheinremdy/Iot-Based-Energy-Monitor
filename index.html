@@ -3,20 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Monitor</title>
+    <title>Energy Consumption Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div id="dashboard">
-        <h1>Energy Consumption Monitor</h1>
-        <div>
-            <p>Current Usage: <span id="current-usage">0 kWh</span></p>
-            <p>Average Usage: <span id="average-usage">0 kWh</span></p>
+
+    <div class="container">
+        <h1>Energy Consumption Dashboard</h1>
+        <button id="theme-btn">Toggle Dark Mode</button>
+
+        <div class="usage-info">
+            <p id="current-usage">Current Usage: 0 kWh</p>
+            <p id="average-usage">Average Usage: 0 kWh</p>
+            <p id="total-usage">Total Usage: 0 kWh</p>
+            <p id="cost-estimation">Estimated Cost: 0 PHP</p>
         </div>
-        <canvas id="usageGraph"></canvas>
-        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+        <canvas id="usageGraph" width="400" height="200"></canvas>
+
+        <form id="energy-form">
+            <label for="daily-usage">Enter Daily Energy Usage (kWh):</label>
+            <input type="number" id="daily-usage" required>
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="help-section" class="hidden">
+            <p>Help: Enter daily energy usage to track your consumption.</p>
+        </div>
+        <button id="help-btn">Help</button>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="script.js"></script>
 </body>
 </html>
