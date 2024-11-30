@@ -1,87 +1,96 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const energyForm = document.getElementById("energy-form");
-    const helpBtn = document.getElementById("help-btn");
-    const themeBtn = document.getElementById("theme-btn");
-    const resultsContainer = document.getElementById("results");
-    const dailyUsageInput = document.getElementById("daily-usage");
-    const helpSection = document.getElementById("help-section");
+document.addEventListener("DOMContentLoaded", function() {
+    const dailyUsages = [10, 12, 8, 15, 9, 13, 14]; // Example energy usage data
+    const currentUsage = dailyUsages[dailyUsages.length - 1];
+    const totalUsage = dailyUsages.reduce((acc, usage) => acc + usage, 0);
+    const averageUsage = totalUsage / dailyUsages.length;
 
-    let dailyUsages = [];
-    const costPerKWh = 10; // Example cost per kWh in PHP
+    document.getElementById("current-usage").textContent = `${currentUsage} kWh`;
+    document.getElementById("average-usage").textContent = `${averageUsage.toFixed(2)} kWh`;
 
-    // Handle form submission for energy usage input
-    energyForm.addEventListener("submit", function (event) {
-        event.preventDefault();
+    // Update Graphs
+    const ctx = document.getElementById('usageGraph').getContext('2d');
+    const barCtx = document.getElementById('usageBarChart').getContext('2d');
+    const pieCtx = document.getElementById('usagePieChart').getContext('2d');
 
-        const dailyUsage = parseFloat(dailyUsageInput.value);
-        if (isNaN(dailyUsage) || dailyUsage <= 0) {
-            alert("Please enter a valid usage.");
-            return;
-        }
-
-        dailyUsages.push(dailyUsage);
-        updateDashboard();
-    });
-
-    // Toggle Help Section Visibility
-    helpBtn.addEventListener("click", function () {
-        helpSection.classList.toggle("hidden");
-    });
-
-    // Toggle Theme between Light and Dark Mode
-    themeBtn.addEventListener("click", function () {
-        document.body.classList.toggle("dark-theme");
-    });
-
-    function updateDashboard() {
-        const totalUsage = dailyUsages.reduce((acc, curr) => acc + curr, 0);
-        const averageUsage = totalUsage / dailyUsages.length;
-        const currentUsage = dailyUsages[dailyUsages.length - 1];
-        const estimatedCost = totalUsage * costPerKWh;
-
-        // Update total, average usage, and estimated cost
-        document.getElementById("total-usage").innerText = `Total Usage: ${totalUsage.toFixed(2)} kWh`;
-        document.getElementById("average-usage").innerText = `Average Usage: ${averageUsage.toFixed(2)} kWh`;
-        document.getElementById("current-usage").innerText = `Current Usage: ${currentUsage} kWh`;
-        document.getElementById("cost-estimation").innerText = `Estimated Cost: ₱${estimatedCost.toFixed(2)}`;
-
-        // Update the graph
-        updateGraph();
-    }
-
-    function updateGraph() {
-        const ctx = document.getElementById("usageGraph").getContext("2d");
-
-        // Clear previous chart
-        if (window.usageChart) {
-            window.usageChart.destroy();
-        }
-
-        const chartData = {
+    // Line Chart
+    new Chart(ctx, {
+        type: 'line',
+        data: {
             labels: Array.from({ length: dailyUsages.length }, (_, i) => `Day ${i + 1}`),
             datasets: [{
-                label: "Energy Usage (kWh)",
+                label: 'Energy Usage (kWh)',
                 data: dailyUsages,
-                borderColor: "#2563EB",
-                backgroundColor: "rgba(37, 99, 235, 0.2)",
-                fill: true,
-                tension: 0.3
+                borderColor: '#2563eb',
+                backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                fill: true
             }]
-        };
-
-        window.usageChart = new Chart(ctx, {
-            type: "line",
-            data: chartData,
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: "top" },
-                    tooltip: { enabled: true }
-                },
-                scales: {
-                    y: { beginAtZero: true }
-                }
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
             }
-        });
-    }
+        }
+    });
+
+    // Bar Chart
+    new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: Array.from({ length: dailyUsages.length }, (_, i) => `Day ${i + 1}`),
+            datasets: [{
+                label: 'Energy Usage (kWh)',
+                data: dailyUsages,
+                backgroundColor: '#2563eb',
+                borderColor: '#2563eb',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Pie Chart
+    new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Usage on First Half', 'Usage on Second Half'],
+            datasets: [{
+                data: [dailyUsages.slice(0, dailyUsages.length / 2).reduce((acc, usage) => acc + usage, 0),
+                       dailyUsages.slice(dailyUsages.length / 2).reduce((acc, usage) => acc + usage, 0)],
+                backgroundColor: ['#2563eb', '#32cd32'],
+            }]
+        }
+    });
+
+    // Toggle Dark Mode
+    document.getElementById("dark-mode-btn").addEventListener("click", function() {
+        document.body.classList.toggle('dark-theme');
+    });
+
+    // Export Data to CSV
+    document.getElementById("export-btn").addEventListener("click", function() {
+        const csvContent = "data:text/csv;charset=utf-8," 
+                            + "Day,Energy Usage (kWh)\n" 
+                            + dailyUsages.map((usage, index) => `${index + 1},${usage}`).join("\n");
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "energy_usage_data.csv");
+        document.body.appendChild(link);
+        link.click();
+    });
+
+    // User login (Simulated)
+    document.getElementById("login-btn").addEventListener("click", function() {
+        const username = prompt("Enter your username:");
+        if (username) {
+            alert(`Welcome, ${username}!`);
+        }
+    });
 });
