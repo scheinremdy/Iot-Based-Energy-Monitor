@@ -8,30 +8,29 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
     <div class="container">
-        <h1>Energy Consumption Dashboard</h1>
-        <button id="theme-btn">Toggle Dark Mode</button>
+        <header>
+            <h1>Energy Consumption Dashboard</h1>
+            <button id="login-btn">Login</button>
+        </header>
 
-        <div class="usage-info">
-            <p id="current-usage">Current Usage: 0 kWh</p>
-            <p id="average-usage">Average Usage: 0 kWh</p>
-            <p id="total-usage">Total Usage: 0 kWh</p>
-            <p id="cost-estimation">Estimated Cost: 0 PHP</p>
+        <div class="dashboard">
+            <div class="stats">
+                <p><strong>Current Usage:</strong> <span id="current-usage">0 kWh</span></p>
+                <p><strong>Average Usage:</strong> <span id="average-usage">0 kWh</span></p>
+            </div>
+            <div class="chart-container">
+                <canvas id="usageGraph"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="usageBarChart"></canvas>
+            </div>
+            <div class="pie-chart-container">
+                <canvas id="usagePieChart"></canvas>
+            </div>
+            <button id="export-btn">Export Data</button>
+            <button id="dark-mode-btn">Toggle Dark Mode</button>
         </div>
-
-        <canvas id="usageGraph" width="400" height="200"></canvas>
-
-        <form id="energy-form">
-            <label for="daily-usage">Enter Daily Energy Usage (kWh):</label>
-            <input type="number" id="daily-usage" required>
-            <button type="submit">Submit</button>
-        </form>
-
-        <div id="help-section" class="hidden">
-            <p>Help: Enter daily energy usage to track your consumption.</p>
-        </div>
-        <button id="help-btn">Help</button>
     </div>
 
     <script src="script.js"></script>
