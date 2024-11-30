@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Monitor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="dashboard">
+        <h1>Energy Consumption Monitor</h1>
+        <div>
+            <p>Current Usage: <span id="current-usage">0 kWh</span></p>
+            <p>Average Usage: <span id="average-usage">0 kWh</span></p>
+        </div>
+        <canvas id="usageGraph"></canvas>
+        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
